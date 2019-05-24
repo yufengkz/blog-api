@@ -5,6 +5,8 @@ import ArticleController from '../controllers/article'
 import CategoryController from '../controllers/category'
 //用户Controller
 import UserController from '../controllers/user'
+//标签Controller
+import TagController from '../controllers/tag'
 
 const router = new Router({
 	prefix: '/api'
@@ -41,6 +43,14 @@ router.put('/category/update/:id', CategoryController.update)
 router.get('/category/list', CategoryController.list)
 // 查询分类ID下的所有文章列表
 router.get('/category/article/:id', CategoryController.article)
+
+/**
+ * 标签tag
+ */
+//创建分类
+router.post('/tag/create', TagController.create)
+// 查询详情
+router.get('/tag/detail/:id', TagController.detail)
 
 /**
  * 用户

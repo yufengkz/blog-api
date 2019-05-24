@@ -38,10 +38,8 @@ class ArticleController {
         }
 
         try {
-
             // 查询分类是否存在
             let detail = await CategoryModel.detail(categoryId)
-
             if (!detail) {
                 ctx.response.status = 200
                 ctx.body = {
@@ -50,11 +48,9 @@ class ArticleController {
                 }
                 return false
             }
-
             // 创建文章
-            const {id} = await ArticleModel.create(params)
-            // 查询文章
-            const data = await ArticleModel.detail(id)
+            let {id} = await ArticleModel.create(params)
+            let data = await ArticleModel.detail(id)
 
             ctx.response.status = 200
             ctx.body = {
