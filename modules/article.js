@@ -20,7 +20,7 @@ Article.belongsToMany(Tag, {
     },
     foreignKey: 'article_id', //通过外键postId
     constraints: false
-});
+})
 Tag.belongsToMany(Article, {
     through: {
         model: ArticleTag,
@@ -28,7 +28,7 @@ Tag.belongsToMany(Article, {
     },
     foreignKey: 'tag_id', //通过外键tagId
     constraints: false
-});
+})
 
 Article.sync({force: false})
 ArticleTag.sync({force: false})
@@ -123,13 +123,10 @@ class ArticleModel {
         let ret = null
         let {page = 1, page_size = 10, category_id, title, include} = params
 
-
         let exclude = include === 'is_del' ? ['content'] : ['content', 'is_del']
         let isShowIsDel = include === 'is_del' ? 1 : 0
 
         if (category_id) {
-            console.log('//////////////////////')
-            console.log(category_id)
             ret = await Article.findAndCountAll({
                 limit: Number(page_size),//每页10条
                 offset: (page - 1) * Number(page_size),
@@ -181,15 +178,14 @@ class ArticleModel {
                 attributes: {exclude: exclude}
             })
         }
-        console.log(ret)
         return {
             list: ret.rows,
             meta: {
                 current_page: parseInt(page),
                 page_size: Number(page_size),
-                count: ret.count,
-                total: ret.count,
-                total_pages: Math.ceil(ret.count / 10),
+                // count: ret.count,
+                // total: ret.count,
+                // total_pages: Math.ceil(ret.count / 10),
             }
         }
     }

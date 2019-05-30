@@ -5,7 +5,7 @@ import {createToken, checkAuth} from '../lib/token'
 class UserController {
     //查询用户
     static async getUser(ctx) {
-        let {username} = ctx.request.body
+        let {username, id} = ctx.request.body
         if(! username) {
             ctx.response.status = 200
             ctx.body = {
@@ -14,9 +14,9 @@ class UserController {
             }
             return
         }
-        
+
         const isAuth = await checkAuth(ctx)
-        if(isAuth){
+        //if(isAuth){
             try {
                 let data = await UserModel.username(username)
                 if (!data) {
@@ -42,7 +42,7 @@ class UserController {
                     data: err
                 }
             }
-        }
+        //}
     }
     
     //查询所有用户

@@ -7,6 +7,8 @@ import CategoryController from '../controllers/category'
 import UserController from '../controllers/user'
 //标签Controller
 import TagController from '../controllers/tag'
+//评论、留言Controller
+import CommentController from '../controllers/comment'
 
 const router = new Router({
 	prefix: '/api'
@@ -51,6 +53,16 @@ router.get('/category/article/:id', CategoryController.article)
 router.post('/tag/create', TagController.create)
 // 查询详情
 router.get('/tag/detail/:id', TagController.detail)
+
+/**
+ * 评论、留言
+ */
+//创建留言
+router.post('/comment/create', CommentController.create)
+//创建留言
+router.post('/comment/createReply', CommentController.createReply)
+//获取留言
+router.get('/comment/list', CommentController.list)
 
 /**
  * 用户
