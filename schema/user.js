@@ -25,13 +25,49 @@ module.exports = function (sequelize, DataTypes) {
             field: 'email',
             allowNull: false
         },
-        // 角色id
-        // roles_id: {
-        //     type: DataTypes.STRING(100),
-        //     field: 'roles_id',
-        //     allowNull: false,
-        //     default: 0
-        // },
+        // 用户头像
+        avatar: {
+            type: DataTypes.TEXT,
+            field: 'avatar',
+            defaultValue: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+        },
+        // 用户头图
+        top_img: {
+            type: DataTypes.TEXT,
+            field: 'top_img',
+            defaultValue: 'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+        },
+        // 用户昵称
+        nick_name: {
+            type: DataTypes.TEXT,
+            field: 'nick_name',
+            allowNull: false,
+            defaultValue: ''
+        },
+        // 介绍
+        introduce: {
+            type: DataTypes.TEXT,
+            field: 'introduce',
+            defaultValue: ''
+        },
+        // 技能
+        skills: {
+            type: DataTypes.TEXT,
+            field: 'skills',
+            default: null
+        },
+        // 其他
+        others: {
+            type: DataTypes.TEXT,
+            field: 'others',
+            default: null
+        },
+        // 爱好
+        favorite: {
+            type: DataTypes.TEXT,
+            field: 'favorite',
+            default: null
+        },
         createdAt: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,

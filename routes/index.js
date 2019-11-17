@@ -1,4 +1,6 @@
 import Router from 'koa-router'
+// 我的作品
+import WorkController from '../controllers/works'
 //文章Controller
 import ArticleController from '../controllers/article'
 //分类
@@ -13,6 +15,22 @@ import CommentController from '../controllers/comment'
 const router = new Router({
 	prefix: '/api'
 })
+
+
+/**
+ * 首页 - 我的作品
+ */
+// 创建作品
+router.post('/work/create', WorkController.create)
+// 获取作品列表
+router.get('/work/list', WorkController.list)
+// 作品详情
+router.get('/work/detail/:id', WorkController.detail)
+// 删除作品
+router.delete('/work/hidden/:id', WorkController.delete)
+// 更改作品、修改作品
+router.put('/work/update/:id', WorkController.update)
+
 
 /**
  * 文章
@@ -53,6 +71,8 @@ router.get('/category/article/:id', CategoryController.article)
 router.post('/tag/create', TagController.create)
 // 查询详情
 router.get('/tag/detail/:id', TagController.detail)
+// 获取所有标签
+router.get('/tag/list', TagController.list)
 
 /**
  * 评论、留言
@@ -71,8 +91,10 @@ router.get('/comment/list', CommentController.list)
 router.post('/createUser', UserController.createUser)
 //删除用户
 router.delete('/delUser', UserController.delUser)
+//修改用户
+router.put('/updateUser/:id', UserController.updateUser)
 //查询用户
-router.post('/getUser', UserController.getUser)
+router.post('/getUser', UserController.searchUser)
 //查询所有用户
 router.post('/getUserList', UserController.getUserList)
 //用户登录

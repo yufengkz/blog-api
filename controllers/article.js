@@ -107,6 +107,8 @@ class ArticleController {
      */
     static async list(ctx) {
         let params = ctx.query
+        console.log('=============')
+        console.log(params)
         try {
             const data = await ArticleModel.list(params)
             ctx.response.status = 200
@@ -158,14 +160,13 @@ class ArticleController {
         }
 
         try {
-
             let data = await ArticleModel.detail(id)
-
+            console.log(data.tag)
             if (data !== null) {
                 // 浏览次数增加1
                 let browser = data.browser + 1
                 await ArticleModel.update(id, {
-                    browser
+                    browser, //tag: ''
                 })
             }
 

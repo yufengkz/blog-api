@@ -42,7 +42,7 @@ class CategoryModel {
      */
     static async list() {
         return await Category.findAll({
-            attributes: ['id', 'name', 'parent_id', 'icon', 'z_index'],
+            attributes: ['id', 'name', 'icon', 'z_index'],
         })
     }
 

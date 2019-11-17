@@ -19,15 +19,24 @@ class UserModel {
         })
     }
 
-    //查询用户
-    static async username(username){
-        return await User.findOne({
+    //更新用户
+    static async updateUser(id, params){
+        console.log(params)
+        await User.update(params, {
             where: {
-                username
+                id
             },
+        })
+        return true
+    }
+
+    //查询用户
+    static async searchUser(params){
+        return await User.findOne({
+            where: params,
             //过滤不必要的数据
             attributes: {
-                //exclude: 'password'
+                exclude: 'password'
             }
         })
     }

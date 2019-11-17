@@ -1,12 +1,12 @@
 import UserModel from '../modules/user'
 import bcrypt from 'bcryptjs'
-import {createToken, checkAuth} from '../lib/token'
+import { createToken, checkAuth } from '../lib/token'
 
 class UserController {
     //查询用户
-    static async getUser(ctx) {
-        let {username, id} = ctx.request.body
-        if(! username) {
+    static async searchUser(ctx) {
+        let params = ctx.request.body
+        if (!params) {
             ctx.response.status = 200
             ctx.body = {
                 code: 1,
@@ -17,41 +17,41 @@ class UserController {
 
         const isAuth = await checkAuth(ctx)
         //if(isAuth){
-            try {
-                let data = await UserModel.username(username)
-                if (!data) {
-                    ctx.response.status = 200
-                    ctx.body = {
-                        code: 1,
-                        msg: `未查到该用户`,
-                        data: {}
-                    }
-                    return
-                }
-                ctx.response.status = 200
-                ctx.body = {
-                    code: 0,
-                    msg: `查询成功`,
-                    data
-                }
-            } catch (err) {
+        try {
+            let data = await UserModel.searchUser(params)
+            if (!data) {
                 ctx.response.status = 200
                 ctx.body = {
                     code: 1,
-                    msg: `查询用户失败`,
-                    data: err
+                    msg: `未查到该用户`,
+                    data: {}
                 }
+                return
             }
+            ctx.response.status = 200
+            ctx.body = {
+                code: 0,
+                msg: `查询成功`,
+                data
+            }
+        } catch (err) {
+            ctx.response.status = 200
+            ctx.body = {
+                code: 1,
+                msg: `查询用户失败`,
+                data: err
+            }
+        }
         //}
     }
-    
+
     //查询所有用户
     static async getUserList(ctx) {
         const isAuth = await checkAuth(ctx)
-        if(isAuth){
+        if (isAuth) {
             try {
                 let data = await UserModel.getUserList()
-                
+
                 ctx.response.status = 200
                 ctx.body = {
                     code: 0,
@@ -71,17 +71,17 @@ class UserController {
 
     //创建用户
     static async createUser(ctx) {
-        let {username, email, password,} = ctx.request.body
-        let params = { username, email, password}
+        let { username, email, password, } = ctx.request.body
+        let params = { username, email, password }
         //校验参数为空
         let errs = []
-        for(let item in params){
-            if(params[item] == undefined){
+        for (let item in params) {
+            if (params[item] == undefined) {
                 let index = errs.length + 1
                 errs.push(`错误${index}:参数${item}不能为空`)
             }
         }
-        if(errs.length){
+        if (errs.length) {
             ctx.status = 200
             ctx.body = {
                 code: 1,
@@ -90,21 +90,21 @@ class UserController {
             return
         }
         //查询用户名是否重复
-        const exisUser = await UserModel.username(params.username)
-        if(exisUser){
+        const exisUser = await UserModel.searchUser({username})
+        if (exisUser) {
             ctx.status = 200
             ctx.body = {
                 code: 1,
                 msg: '该用户已经存在'
             }
             return
-        }else{
+        } else {
             try {
                 //加密
                 const salt = bcrypt.genSaltSync()
                 const hash = bcrypt.hashSync(params.password, salt)
                 params.password = hash
-                
+
                 //创建用户
                 await UserModel.createUser(params)
                 ctx.response.status = 200
@@ -123,9 +123,61 @@ class UserController {
         }
     }
 
+    //完善用户信息用户
+    static async updateUser(ctx) {
+        let { id } =  ctx.params
+        let { avatar, top_img, nick_name, introduce } = ctx.request.body
+        let params = { nick_name }
+        //校验参数为空
+        let errs = []
+        for (let item in params) {
+            if (params[item] == undefined) {
+                let index = errs.length + 1
+                errs.push(`错误${index}:参数${item}不能为空`)
+            }
+        }
+        if (errs.length) {
+            ctx.status = 200
+            ctx.body = {
+                code: 1,
+                msg: errs
+            }
+            return
+        }
+        try {
+            let user = await UserModel.searchUser({id})
+            console.log(user)
+            if(! user){
+                ctx.response.status = 200
+                ctx.body = {
+                    code: 1,
+                    msg: `未找到该用户，请先注册`,
+                    data: err
+                }
+            }
+            // 更新用户
+            console.log(ctx.request.body)
+            await UserModel.updateUser(id, ctx.request.body)
+            let data = await UserModel.searchUser({id})
+            ctx.response.status = 200
+            ctx.body = {
+                code: 0,
+                msg: `更新用户信息成功`,
+                data
+            }
+        } catch (err) {
+            ctx.response.status = 200
+            ctx.body = {
+                code: 1,
+                msg: `修改用户信息失败`,
+                data: err
+            }
+        }
+    }
+
     //删除用户
-    static async delUser(ctx){
-        let {id} = ctx.request.body
+    static async delUser(ctx) {
+        let { id } = ctx.request.body
         try {
             await UserModel.delUser(id)
             ctx.response.status = 200
@@ -146,11 +198,11 @@ class UserController {
 
     //用户登录
     static async login(ctx) {
-        const {username, password} = ctx.request.body
+        const { username, password } = ctx.request.body
         //查询用户
         const userDetail = await UserModel.username(username)
 
-        if(! userDetail){
+        if (!userDetail) {
             ctx.status = 200
             ctx.body = {
                 code: 1,
@@ -160,9 +212,9 @@ class UserController {
         }
 
         //判断当前密码与库里的密码是否一致
-        if(bcrypt.compareSync(password, userDetail.password)){
+        if (bcrypt.compareSync(password, userDetail.password)) {
             //生成token
-            const userToken = {id: userDetail.id, email: userDetail.email, username: userDetail.username}
+            const userToken = { id: userDetail.id, email: userDetail.email, username: userDetail.username }
             const token = await createToken(userToken)
             ctx.status = 200
             ctx.body = {
@@ -175,7 +227,7 @@ class UserController {
                     token: token
                 }
             }
-        }else{
+        } else {
             ctx.status = 200
             ctx.body = {
                 code: 1,

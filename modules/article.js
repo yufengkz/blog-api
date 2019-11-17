@@ -65,7 +65,7 @@ class ArticleModel {
     static async update(id, params) {
         //id为需要修改的ID,data = {name:'修改文章',tagIds:[1]}
         let {tag} = params
-        let arr = tag.split('|') || []
+        let arr = (tag ? tag : '') && tag.split('|') || []
         let tags = await Tag.findAll({where: {id: arr}})
         let oldArticle = await Article.findByPk(id)
         let newArticle = await oldArticle.update(params)
@@ -184,8 +184,8 @@ class ArticleModel {
                 current_page: parseInt(page),
                 page_size: Number(page_size),
                 // count: ret.count,
-                // total: ret.count,
-                // total_pages: Math.ceil(ret.count / 10),
+                total: ret.count,
+                total_pages: Math.ceil(ret.count / page_size),
             }
         }
     }

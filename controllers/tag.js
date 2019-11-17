@@ -60,8 +60,25 @@ class TagController {
                 msg: `查询失败`
             }
         }
+    }
 
-
+    //查询所有tag
+    static async list (ctx) {
+        try {
+            const data = await TagModel.list()
+            ctx.status = 200
+            ctx.body = {
+                code: 0,
+                msg: `查询成功`,
+                data
+            }
+        } catch (err) {
+            ctx.status = 200
+            ctx.body = {
+                code: 1,
+                msg: `查询失败`
+            }
+        }
     }
 }
 

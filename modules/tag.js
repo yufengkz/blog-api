@@ -24,7 +24,12 @@ class TagModel {
                 id
             }
         })
-    }    
+    }
+    
+    //获取所有tag
+    static async list () {
+        return await Tag.findAll()
+    }
 }
 
 export default TagModel
