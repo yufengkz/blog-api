@@ -1,6 +1,6 @@
 export default {
     env: 'production',
-    PORT: 3000,
+    PORT: 3001,
     HOST: '127.0.0.1',
     DB_NAME: 'blogs',
     ROOT: 'root',
