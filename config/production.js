@@ -1,7 +1,7 @@
 export default {
     env: 'production',
     PORT: 3001,
-    HOST: '127.0.0.1',
+    HOST: '0.0.0.0',
     DB_NAME: 'blogs',
     ROOT: 'root',
     PASSWORD: '12345678',
